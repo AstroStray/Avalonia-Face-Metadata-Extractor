@@ -3,12 +3,61 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:MetaExtractor.Core.ViewModels"
+             xmlns:converters="using:MetaExtractor.App.UI.Avalonia.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="MetaExtractor.App.UI.Avalonia.Views.AnalyzeView"
              x:DataType="vm:AnalyzeViewModel">
+  <UserControl.Resources>
+    <converters:MatToBitmapConverter x:Key="MatToBitmapConverter"/>
+  </UserControl.Resources>
+  <Design.DataContext>
+    <vm:AnalyzeViewModel/>
+  </Design.DataContext>
 
-    <TextBlock Text="Analyze Page"
-               HorizontalAlignment="Center"
-               VerticalAlignment="Center" />
+  <Grid ColumnDefinitions="220,*" Background="#1e1e1e">
+    <Grid Grid.Column="0" Background="#252525">
+      <!-- Sidebar Navigation -->
+      <StackPanel Margin="10">
+        <TextBlock Text="MetaExtractor" FontSize="24" FontWeight="Bold" Foreground="White" Margin="0,0,0,20"/>
+        <Button Content="Analyze" Command="{Binding NavigateToAnalyzeCommand}" Background="#333" Foreground="White" BorderThickness="0" Margin="0,5"/>
+        <Button Content="Data Cluster" Command="{Binding NavigateToDataClusterCommand}" Background="#333" Foreground="White" BorderThickness="0" Margin="0,5"/>
+        <Button Content="Settings" Command="{Binding NavigateToSettingsCommand}" Background="#333" Foreground="White" BorderThickness="0" Margin="0,5"/>
+      </StackPanel>
+    </Grid>
 
+    <Grid Grid.Column="1" Margin="20">
+      <Grid RowDefinitions="Auto,*,Auto">
+        <TextBlock Grid.Row="0" Text="Analyze" FontSize="28" FontWeight="Bold" Foreground="White" Margin="0,0,0,20"/>
+
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto">
+          <!-- Video Preview -->
+          <Border Grid.Column="0" Background="#2d2d2d" CornerRadius="5">
+            <Image Source="{Binding VideoFrame, Converter={StaticResource MatToBitmapConverter}}" Stretch="Uniform"/>
+          </Border>
+
+          <!-- Metadata Display -->
+          <StackPanel Grid.Column="1" Margin="20,0,0,0" Width="250">
+            <TextBlock Text="Metadata" FontSize="20" FontWeight="SemiBold" Foreground="White" Margin="0,0,0,10"/>
+            <Border Background="#252525" CornerRadius="5" Padding="15">
+              <StackPanel>
+                <TextBlock Text="Landmarks:" Foreground="White" FontWeight="Bold"/>
+                <TextBlock Text="{Binding Landmarks}" Foreground="LightGray" TextWrapping="Wrap" Margin="0,5,0,10"/>
+                <TextBlock Text="Expressions:" Foreground="White" FontWeight="Bold"/>
+                <TextBlock Text="{Binding Expressions}" Foreground="LightGray" TextWrapping="Wrap" Margin="0,5,0,10"/>
+                <TextBlock Text="Demographics:" Foreground="White" FontWeight="Bold"/>
+                <TextBlock Text="{Binding Demographics}" Foreground="LightGray" TextWrapping="Wrap" Margin="0,5,0,0"/>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </Grid>
+
+        <!-- Control Panel -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
+          <Button Content="Start" Command="{Binding StartAnalysisCommand}" Background="#007acc" Foreground="White" BorderThickness="0" Margin="5"/>
+          <Button Content="Stop" Command="{Binding StopAnalysisCommand}" Background="#cc0000" Foreground="White" BorderThickness="0" Margin="5"/>
+          <Button Content="Save" Command="{Binding SaveResultsCommand}" Background="#339933" Foreground="White" BorderThickness="0" Margin="5"/>
+        </StackPanel>
+      </Grid>
+    </Grid>
+  </Grid>
 </UserControl>
