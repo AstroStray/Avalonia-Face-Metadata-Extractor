@@ -7,8 +7,181 @@
              x:Class="MetaExtractor.App.UI.Avalonia.Views.DataClusterView"
              x:DataType="vm:DataClusterViewModel">
 
-    <TextBlock Text="Data Cluster Page"
-               HorizontalAlignment="Center"
-               VerticalAlignment="Center" />
+  <Border Background="#1e1e1e" CornerRadius="10" Margin="5">
+    <Grid Margin="20" RowDefinitions="Auto,*">
+      <!-- Header Section -->
+      <Border Grid.Row="0" 
+              Background="#2d2d2d" 
+              CornerRadius="10" 
+              Padding="20" 
+              Margin="0,0,0,20">
+        <StackPanel>
+          <TextBlock Text="📊 Data Analysis and Clustering" 
+                     FontSize="20" 
+                     FontWeight="SemiBold" 
+                     Foreground="White" 
+                     Margin="0,0,0,10"/>
+          <TextBlock Text="Analyze stored face metadata and discover patterns through clustering algorithms" 
+                     FontSize="14" 
+                     Foreground="#888888" 
+                     TextWrapping="Wrap"/>
+        </StackPanel>
+      </Border>
+
+      <!-- Content Grid -->
+      <Grid Grid.Row="1" ColumnDefinitions="*,350" RowDefinitions="Auto,*">
+        <!-- Statistics Cards -->
+        <UniformGrid Grid.Column="0" 
+                     Grid.Row="0" 
+                     Columns="3" 
+                     Margin="0,0,20,20">
+          <!-- Total Faces Card -->
+          <Border Background="#252525" 
+                  CornerRadius="8" 
+                  Padding="15" 
+                  Margin="0,0,10,0">
+            <StackPanel>
+              <TextBlock Text="👥" FontSize="24" Foreground="#007acc" HorizontalAlignment="Center"/>
+              <TextBlock Text="Total Faces" 
+                         FontSize="12" 
+                         Foreground="#888888" 
+                         HorizontalAlignment="Center"
+                         Margin="0,5,0,0"/>
+              <TextBlock Text="0" 
+                         FontSize="18" 
+                         FontWeight="Bold" 
+                         Foreground="White" 
+                         HorizontalAlignment="Center"
+                         Margin="0,5,0,0"/>
+            </StackPanel>
+          </Border>
+
+          <!-- Clusters Card -->
+          <Border Background="#252525" 
+                  CornerRadius="8" 
+                  Padding="15" 
+                  Margin="5,0">
+            <StackPanel>
+              <TextBlock Text="🎯" FontSize="24" Foreground="#28a745" HorizontalAlignment="Center"/>
+              <TextBlock Text="Clusters Found" 
+                         FontSize="12" 
+                         Foreground="#888888" 
+                         HorizontalAlignment="Center"
+                         Margin="0,5,0,0"/>
+              <TextBlock Text="0" 
+                         FontSize="18" 
+                         FontWeight="Bold" 
+                         Foreground="White" 
+                         HorizontalAlignment="Center"
+                         Margin="0,5,0,0"/>
+            </StackPanel>
+          </Border>
+
+          <!-- Processing Card -->
+          <Border Background="#252525" 
+                  CornerRadius="8" 
+                  Padding="15" 
+                  Margin="10,0,0,0">
+            <StackPanel>
+              <TextBlock Text="⚡" FontSize="24" Foreground="#ffc107" HorizontalAlignment="Center"/>
+              <TextBlock Text="Last Analysis" 
+                         FontSize="12" 
+                         Foreground="#888888" 
+                         HorizontalAlignment="Center"
+                         Margin="0,5,0,0"/>
+              <TextBlock Text="Never" 
+                         FontSize="18" 
+                         FontWeight="Bold" 
+                         Foreground="White" 
+                         HorizontalAlignment="Center"
+                         Margin="0,5,0,0"/>
+            </StackPanel>
+          </Border>
+        </UniformGrid>
+
+        <!-- Main Data Visualization Area -->
+        <Border Grid.Column="0" 
+                Grid.Row="1" 
+                Background="#252525" 
+                CornerRadius="10" 
+                Padding="20"
+                Margin="0,0,20,0">
+          <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Text="📈" FontSize="64" Foreground="#666666" HorizontalAlignment="Center"/>
+            <TextBlock Text="No Data Available" 
+                       FontSize="18" 
+                       Foreground="#888888" 
+                       HorizontalAlignment="Center"
+                       Margin="0,15,0,0"/>
+            <TextBlock Text="Start analyzing faces to see clustering results" 
+                       FontSize="12" 
+                       Foreground="#666666" 
+                       HorizontalAlignment="Center"
+                       Margin="0,8,0,0"/>
+          </StackPanel>
+        </Border>
+
+        <!-- Control Panel -->
+        <StackPanel Grid.Column="1" 
+                    Grid.Row="0" 
+                    Grid.RowSpan="2" 
+                    Spacing="15">
+          <!-- Clustering Options -->
+          <Border Background="#252525" 
+                  CornerRadius="10" 
+                  Padding="20">
+            <StackPanel Spacing="15">
+              <TextBlock Text="🎛️ Clustering Settings" 
+                         FontSize="16" 
+                         FontWeight="SemiBold" 
+                         Foreground="White"/>
+              
+              <Button Content="🔍 Analyze Data" 
+                      Background="#007acc" 
+                      Foreground="White" 
+                      BorderThickness="0" 
+                      CornerRadius="6"
+                      Padding="15,10"
+                      FontWeight="Medium"
+                      HorizontalAlignment="Stretch"/>
+              
+              <Button Content="📊 Run Clustering" 
+                      Background="#28a745" 
+                      Foreground="White" 
+                      BorderThickness="0" 
+                      CornerRadius="6"
+                      Padding="15,10"
+                      FontWeight="Medium"
+                      HorizontalAlignment="Stretch"/>
+              
+              <Button Content="💾 Export Results" 
+                      Background="#6f42c1" 
+                      Foreground="White" 
+                      BorderThickness="0" 
+                      CornerRadius="6"
+                      Padding="15,10"
+                      FontWeight="Medium"
+                      HorizontalAlignment="Stretch"/>
+            </StackPanel>
+          </Border>
+
+          <!-- Recent Results -->
+          <Border Background="#252525" 
+                  CornerRadius="10" 
+                  Padding="20">
+            <StackPanel Spacing="10">
+              <TextBlock Text="📋 Recent Results" 
+                         FontSize="16" 
+                         FontWeight="SemiBold" 
+                         Foreground="White"/>
+              <TextBlock Text="No recent clustering results" 
+                         FontSize="12" 
+                         Foreground="#888888"/>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </Grid>
+    </Grid>
+  </Border>
 
 </UserControl>
