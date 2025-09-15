@@ -6,6 +6,7 @@ using MetaExtractor.App.UI.Avalonia.Views;
 using MetaExtractor.Core.Services;
 using MetaExtractor.Core.ViewModels;
 using MetaExtractor.Infrastructure.Data;
+using MetaExtractor.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -44,6 +45,8 @@ public partial class App : Application
 
         // Services
         services.AddTransient<IImageProcessingService, ImageProcessingService>();
+        services.AddSingleton<IPythonScriptRunner, PythonScriptRunner>();
+        services.AddSingleton<IImageSourceStrategyFactory, ImageSourceStrategyFactory>();
 
         // ViewModels
         services.AddSingleton<ShellViewModel>();
