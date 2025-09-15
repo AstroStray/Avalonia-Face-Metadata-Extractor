@@ -1,0 +1,29 @@
+# Global code owners
+* @AstroStray
+
+# CI/CD and GitHub configurations
+/.github/ @AstroStray
+
+# Core application logic
+/src/MetaExtractor.Core/ @AstroStray
+
+# Domain models and entities
+/src/MetaExtractor.Domain/ @AstroStray
+
+# Infrastructure and data access
+/src/MetaExtractor.Infrastructure/ @AstroStray
+
+# UI and presentation layer
+/src/MetaExtractor.App.UI.Avalonia/ @AstroStray
+
+# Test projects
+/tests/ @AstroStray
+
+# Documentation
+*.md @AstroStray
+/docs/ @AstroStray
+
+# Configuration files
+*.yml @AstroStray
+*.yaml @AstroStray
+*.json @AstroStray

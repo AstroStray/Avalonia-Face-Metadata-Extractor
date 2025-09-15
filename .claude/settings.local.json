@@ -5,7 +5,9 @@
       "Bash(gh issue list:*)",
       "Bash(dotnet build)",
       "Bash(git add:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(gh issue view:*)",
+      "Bash(dotnet test:*)"
     ],
     "deny": [],
     "ask": []
