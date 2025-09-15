@@ -7,8 +7,299 @@
              x:Class="MetaExtractor.App.UI.Avalonia.Views.SettingsView"
              x:DataType="vm:SettingsViewModel">
 
-    <TextBlock Text="Settings Page"
-               HorizontalAlignment="Center"
-               VerticalAlignment="Center" />
+  <Border Background="#1e1e1e" CornerRadius="10" Margin="5">
+    <ScrollViewer>
+      <Grid Margin="20" RowDefinitions="Auto,*">
+        <!-- Header Section -->
+        <Border Grid.Row="0" 
+                Background="#2d2d2d" 
+                CornerRadius="10" 
+                Padding="20" 
+                Margin="0,0,0,20">
+          <StackPanel>
+            <TextBlock Text="⚙️ Application Settings" 
+                       FontSize="20" 
+                       FontWeight="SemiBold" 
+                       Foreground="White" 
+                       Margin="0,0,0,10"/>
+            <TextBlock Text="Configure MetaExtractor for optimal face analysis performance" 
+                       FontSize="14" 
+                       Foreground="#888888" 
+                       TextWrapping="Wrap"/>
+          </StackPanel>
+        </Border>
+
+        <!-- Settings Content -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="20">
+          <!-- Left Column -->
+          <StackPanel Grid.Column="0" Spacing="20">
+            <!-- Camera Settings -->
+            <Border Background="#252525" CornerRadius="10" Padding="20">
+              <StackPanel Spacing="15">
+                <TextBlock Text="📹 Camera Settings" 
+                           FontSize="16" 
+                           FontWeight="SemiBold" 
+                           Foreground="White"/>
+                
+                <StackPanel>
+                  <TextBlock Text="Camera Device" 
+                             FontSize="12" 
+                             Foreground="#888888" 
+                             Margin="0,0,0,5"/>
+                  <ComboBox Background="#1e1e1e" 
+                            BorderBrush="#444444" 
+                            Foreground="White">
+                    <ComboBoxItem Content="Default Camera" IsSelected="True"/>
+                    <ComboBoxItem Content="USB Camera 1"/>
+                    <ComboBoxItem Content="USB Camera 2"/>
+                  </ComboBox>
+                </StackPanel>
+
+                <StackPanel>
+                  <TextBlock Text="Resolution" 
+                             FontSize="12" 
+                             Foreground="#888888" 
+                             Margin="0,0,0,5"/>
+                  <ComboBox Background="#1e1e1e" 
+                            BorderBrush="#444444" 
+                            Foreground="White">
+                    <ComboBoxItem Content="640 x 480"/>
+                    <ComboBoxItem Content="1280 x 720" IsSelected="True"/>
+                    <ComboBoxItem Content="1920 x 1080"/>
+                  </ComboBox>
+                </StackPanel>
+
+                <StackPanel>
+                  <TextBlock Text="Frame Rate (FPS)" 
+                             FontSize="12" 
+                             Foreground="#888888" 
+                             Margin="0,0,0,5"/>
+                  <Slider Value="30" 
+                          Minimum="15" 
+                          Maximum="60" 
+                          TickFrequency="15"
+                          IsSnapToTickEnabled="True"/>
+                  <TextBlock Text="30 FPS" 
+                             FontSize="10" 
+                             Foreground="#666666" 
+                             HorizontalAlignment="Center"/>
+                </StackPanel>
+              </StackPanel>
+            </Border>
+
+            <!-- Analysis Models -->
+            <Border Background="#252525" CornerRadius="10" Padding="20">
+              <StackPanel Spacing="15">
+                <TextBlock Text="🧠 Analysis Models" 
+                           FontSize="16" 
+                           FontWeight="SemiBold" 
+                           Foreground="White"/>
+                
+                <CheckBox Content="MediaPipe Face Detection" 
+                          Foreground="White" 
+                          IsChecked="True"/>
+                <CheckBox Content="Age Estimation (ONNX)" 
+                          Foreground="White"/>
+                <CheckBox Content="Gender Classification (ONNX)" 
+                          Foreground="White"/>
+                <CheckBox Content="Emotion Recognition (ONNX)" 
+                          Foreground="White"/>
+                <CheckBox Content="Ethnicity Detection (ONNX)" 
+                          Foreground="White"/>
+
+                <Button Content="📁 Browse Model Files" 
+                        Background="#6c757d" 
+                        Foreground="White" 
+                        BorderThickness="0" 
+                        CornerRadius="6"
+                        Padding="10,8"
+                        HorizontalAlignment="Left"/>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+
+          <!-- Right Column -->
+          <StackPanel Grid.Column="1" Spacing="20">
+            <!-- Data Storage -->
+            <Border Background="#252525" CornerRadius="10" Padding="20">
+              <StackPanel Spacing="15">
+                <TextBlock Text="💾 Data Storage" 
+                           FontSize="16" 
+                           FontWeight="SemiBold" 
+                           Foreground="White"/>
+                
+                <StackPanel>
+                  <TextBlock Text="Database Location" 
+                             FontSize="12" 
+                             Foreground="#888888" 
+                             Margin="0,0,0,5"/>
+                  <Grid ColumnDefinitions="*,Auto">
+                    <TextBox Grid.Column="0"
+                             Text="./metaextractor.db" 
+                             Background="#1e1e1e" 
+                             BorderBrush="#444444" 
+                             Foreground="White"
+                             IsReadOnly="True"/>
+                    <Button Grid.Column="1"
+                            Content="📁" 
+                            Background="#6c757d" 
+                            Foreground="White" 
+                            BorderThickness="0" 
+                            Width="35"
+                            Margin="5,0,0,0"/>
+                  </Grid>
+                </StackPanel>
+
+                <StackPanel>
+                  <TextBlock Text="Export Format" 
+                             FontSize="12" 
+                             Foreground="#888888" 
+                             Margin="0,0,0,5"/>
+                  <ComboBox Background="#1e1e1e" 
+                            BorderBrush="#444444" 
+                            Foreground="White">
+                    <ComboBoxItem Content="JSON" IsSelected="True"/>
+                    <ComboBoxItem Content="CSV"/>
+                    <ComboBoxItem Content="XML"/>
+                  </ComboBox>
+                </StackPanel>
+
+                <StackPanel>
+                  <TextBlock Text="Data Retention (Days)" 
+                             FontSize="12" 
+                             Foreground="#888888" 
+                             Margin="0,0,0,5"/>
+                  <NumericUpDown Value="365" 
+                                 Minimum="1" 
+                                 Maximum="3650"
+                                 Background="#1e1e1e" 
+                                 BorderBrush="#444444" 
+                                 Foreground="White"/>
+                </StackPanel>
+              </StackPanel>
+            </Border>
+
+            <!-- Performance -->
+            <Border Background="#252525" CornerRadius="10" Padding="20">
+              <StackPanel Spacing="15">
+                <TextBlock Text="⚡ Performance" 
+                           FontSize="16" 
+                           FontWeight="SemiBold" 
+                           Foreground="White"/>
+                
+                <StackPanel>
+                  <TextBlock Text="Processing Threads" 
+                             FontSize="12" 
+                             Foreground="#888888" 
+                             Margin="0,0,0,5"/>
+                  <Slider Value="4" 
+                          Minimum="1" 
+                          Maximum="16" 
+                          TickFrequency="1"
+                          IsSnapToTickEnabled="True"/>
+                  <TextBlock Text="4 Threads" 
+                             FontSize="10" 
+                             Foreground="#666666" 
+                             HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel>
+                  <TextBlock Text="Memory Limit (MB)" 
+                             FontSize="12" 
+                             Foreground="#888888" 
+                             Margin="0,0,0,5"/>
+                  <NumericUpDown Value="1024" 
+                                 Minimum="256" 
+                                 Maximum="8192"
+                                 Increment="256"
+                                 Background="#1e1e1e" 
+                                 BorderBrush="#444444" 
+                                 Foreground="White"/>
+                </StackPanel>
+
+                <CheckBox Content="Enable GPU Acceleration" 
+                          Foreground="White" 
+                          IsChecked="False"/>
+                <CheckBox Content="Use Hardware Decoding" 
+                          Foreground="White" 
+                          IsChecked="True"/>
+              </StackPanel>
+            </Border>
+
+            <!-- Application Theme -->
+            <Border Background="#252525" CornerRadius="10" Padding="20">
+              <StackPanel Spacing="15">
+                <TextBlock Text="🎨 Appearance" 
+                           FontSize="16" 
+                           FontWeight="SemiBold" 
+                           Foreground="White"/>
+                
+                <StackPanel>
+                  <TextBlock Text="Theme" 
+                             FontSize="12" 
+                             Foreground="#888888" 
+                             Margin="0,0,0,5"/>
+                  <ComboBox Background="#1e1e1e" 
+                            BorderBrush="#444444" 
+                            Foreground="White">
+                    <ComboBoxItem Content="Dark Theme" IsSelected="True"/>
+                    <ComboBoxItem Content="Light Theme"/>
+                    <ComboBoxItem Content="System Default"/>
+                  </ComboBox>
+                </StackPanel>
+
+                <StackPanel>
+                  <TextBlock Text="Accent Color" 
+                             FontSize="12" 
+                             Foreground="#888888" 
+                             Margin="0,0,0,5"/>
+                  <UniformGrid Columns="5" Margin="0,5,0,0">
+                    <Border Background="#007acc" Width="25" Height="25" CornerRadius="12" Margin="2"/>
+                    <Border Background="#28a745" Width="25" Height="25" CornerRadius="12" Margin="2"/>
+                    <Border Background="#dc3545" Width="25" Height="25" CornerRadius="12" Margin="2"/>
+                    <Border Background="#6f42c1" Width="25" Height="25" CornerRadius="12" Margin="2"/>
+                    <Border Background="#ffc107" Width="25" Height="25" CornerRadius="12" Margin="2"/>
+                  </UniformGrid>
+                </StackPanel>
+              </StackPanel>
+            </Border>
+          </StackPanel>
+        </Grid>
+
+        <!-- Save Button -->
+        <Border Grid.Row="2" 
+                Background="#2d2d2d" 
+                CornerRadius="10" 
+                Padding="20" 
+                Margin="0,20,0,0"
+                Grid.ColumnSpan="2">
+          <Grid ColumnDefinitions="*,Auto">
+            <TextBlock Grid.Column="0"
+                       Text="💡 Changes will be applied immediately" 
+                       FontSize="12" 
+                       Foreground="#888888" 
+                       VerticalAlignment="Center"/>
+            <StackPanel Grid.Column="1" 
+                        Orientation="Horizontal" 
+                        Spacing="10">
+              <Button Content="🔄 Reset to Defaults" 
+                      Background="#6c757d" 
+                      Foreground="White" 
+                      BorderThickness="0" 
+                      CornerRadius="6"
+                      Padding="15,8"/>
+              <Button Content="💾 Save Settings" 
+                      Background="#28a745" 
+                      Foreground="White" 
+                      BorderThickness="0" 
+                      CornerRadius="6"
+                      Padding="15,8"
+                      FontWeight="Medium"/>
+            </StackPanel>
+          </Grid>
+        </Border>
+      </Grid>
+    </ScrollViewer>
+  </Border>
 
 </UserControl>

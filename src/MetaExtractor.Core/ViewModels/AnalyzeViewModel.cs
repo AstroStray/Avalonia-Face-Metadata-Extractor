@@ -56,24 +56,7 @@ namespace MetaExtractor.Core.ViewModels
         private void SaveResults()
         {
             // Logic to save the analysis results
-        }
-
-        [RelayCommand]
-        private void NavigateToAnalyze()
-        {
-            // Logic to navigate to the Analyze view
-        }
-
-        [RelayCommand]
-        private void NavigateToDataCluster()
-        {
-            // Logic to navigate to the Data Cluster view
-        }
-
-        [RelayCommand]
-        private void NavigateToSettings()
-        {
-            // Logic to navigate to the Settings view
+            // TODO: Implement actual save functionality
         }
     }
 }
