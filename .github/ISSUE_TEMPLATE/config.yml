@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 💬 Discussions
+    url: https://github.com/AstroStray/Avalonia-Face-Metadata-Extractor/discussions
+    about: Ask questions, share ideas, and discuss the project with the community
+  - name: 📚 Documentation
+    url: https://github.com/AstroStray/Avalonia-Face-Metadata-Extractor/wiki
+    about: Read the project documentation and guides
+  - name: 🔧 Support
+    url: https://github.com/AstroStray/Avalonia-Face-Metadata-Extractor/discussions/categories/q-a
+    about: Get help with setup, configuration, or usage questions
