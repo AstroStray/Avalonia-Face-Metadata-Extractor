@@ -1,0 +1,36 @@
+name: .NET Build, Test, and Coverage
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore
+
+    - name: Test with code coverage
+      run: dotnet test --no-build --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage
+
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./coverage/**/coverage.cobertura.xml
+        fail_ci_if_error: true
+        verbose: true

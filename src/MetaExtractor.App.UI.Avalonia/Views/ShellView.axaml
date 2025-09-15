@@ -1,0 +1,30 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:MetaExtractor.Core.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="768"
+        x:Class="MetaExtractor.App.UI.Avalonia.Views.ShellView"
+        x:DataType="vm:ShellViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="MetaExtractor"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid ColumnDefinitions="200, *">
+        <!-- Sidebar -->
+        <Panel Grid.Column="0" Background="#f0f0f0">
+            <StackPanel Spacing="10" Margin="10">
+                <TextBlock Text="MetaExtractor" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+                <Button Content="Analyze" Command="{Binding NavigateToAnalyzeCommand}" HorizontalContentAlignment="Center"/>
+                <Button Content="Data Cluster" Command="{Binding NavigateToDataClusterCommand}" HorizontalContentAlignment="Center"/>
+                <Button Content="Settings" Command="{Binding NavigateToSettingsCommand}" HorizontalContentAlignment="Center"/>
+            </StackPanel>
+        </Panel>
+
+        <!-- Main Content -->
+        <ContentControl Grid.Column="1"
+                        Content="{Binding CurrentPage}" />
+    </Grid>
+
+</Window>
