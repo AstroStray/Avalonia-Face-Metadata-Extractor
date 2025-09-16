@@ -31,7 +31,7 @@ jobs:
 
     steps:
     - name: 🔄 Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: ⚙️ Setup .NET
       uses: actions/setup-dotnet@v5
@@ -62,7 +62,7 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - name: 🔄 Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         
       - name: 🔍 Dependency Review
         uses: actions/dependency-review-action@v4
@@ -79,7 +79,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🔄 Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         
       - name: 🔒 Run Hardening Checklist
         run: |
@@ -116,7 +116,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🔄 Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         
       - name: ⚙️ Setup .NET
         uses: actions/setup-dotnet@v5
