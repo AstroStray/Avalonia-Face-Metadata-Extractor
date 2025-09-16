@@ -10,7 +10,11 @@
       "Bash(gh issue view:*)",
       "Bash(dotnet test:*)",
       "Bash(gh pr create:*)",
-      "Bash(gh pr view:*)"
+      "Bash(gh pr view:*)",
+      "WebSearch",
+      "Bash(dotnet add:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []

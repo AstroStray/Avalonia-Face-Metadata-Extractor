@@ -9,6 +9,12 @@
     <PackageReference Include="OpenCvSharp4" Version="4.11.0.20250507" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Resources\haarcascade_frontalface_alt.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <LangVersion>latest</LangVersion>

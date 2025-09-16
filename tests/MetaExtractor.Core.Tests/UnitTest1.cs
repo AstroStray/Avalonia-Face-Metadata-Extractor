@@ -1,3 +1,4 @@
+using MetaExtractor.Core.Interfaces;
 using MetaExtractor.Core.Services;
 using MetaExtractor.Core.ViewModels;
 using Moq;
@@ -7,11 +8,18 @@ namespace MetaExtractor.Core.Tests;
 
 public class ImageProcessingServiceTests
 {
+    private readonly Mock<IFaceDetectionService> _mockFaceDetectionService;
+
+    public ImageProcessingServiceTests()
+    {
+        _mockFaceDetectionService = new Mock<IFaceDetectionService>();
+    }
+
     [Fact]
     public void SetStrategy_ShouldAcceptValidStrategy()
     {
         // Arrange
-        var service = new ImageProcessingService();
+        var service = new ImageProcessingService(_mockFaceDetectionService.Object);
         var mockStrategy = new Mock<IImageSourceStrategy>();
 
         // Act & Assert (Should not throw)
@@ -22,7 +30,7 @@ public class ImageProcessingServiceTests
     public async Task StartProcessingAsync_ShouldThrowWhenNoStrategy()
     {
         // Arrange
-        var service = new ImageProcessingService();
+        var service = new ImageProcessingService(_mockFaceDetectionService.Object);
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(
@@ -33,10 +41,18 @@ public class ImageProcessingServiceTests
     public async Task StopProcessingAsync_ShouldCompleteSuccessfully()
     {
         // Arrange
-        var service = new ImageProcessingService();
+        var service = new ImageProcessingService(_mockFaceDetectionService.Object);
 
         // Act & Assert (Should not throw)
         await service.StopProcessingAsync();
+    }
+
+    [Fact]
+    public void Constructor_WithValidDependencies_ShouldCreateInstance()
+    {
+        // Act & Assert (Should not throw)
+        var service = new ImageProcessingService(_mockFaceDetectionService.Object);
+        Assert.NotNull(service);
     }
 }
 
