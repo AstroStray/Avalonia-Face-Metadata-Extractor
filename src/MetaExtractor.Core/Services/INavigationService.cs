@@ -61,6 +61,13 @@ public interface INavigationService
     /// Clear the navigation history.
     /// </summary>
     void ClearHistory();
+
+    /// <summary>
+    /// Register a page with the navigation service.
+    /// </summary>
+    /// <param name="pageKey">The key to identify the page.</param>
+    /// <param name="viewModelType">The ViewModel type for the page.</param>
+    void RegisterPage(string pageKey, Type viewModelType);
 }
 
 /// <summary>

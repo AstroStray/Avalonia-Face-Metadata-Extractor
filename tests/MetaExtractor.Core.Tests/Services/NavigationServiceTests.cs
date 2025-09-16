@@ -164,13 +164,13 @@ public class NavigationServiceTests
     }
 
     [Fact]
-    public void RegisterPage_ShouldAddPageToRegistry()
+    public async Task RegisterPage_ShouldAddPageToRegistry()
     {
         // Act
         _navigationService.RegisterPage("CustomPage", typeof(AnalyzeViewModel));
 
         // Assert - Should not throw when navigating to the registered page
-        var exception = Record.ExceptionAsync(() => _navigationService.NavigateAsync("CustomPage"));
-        Assert.Null(exception.Result);
+        var exception = await Record.ExceptionAsync(() => _navigationService.NavigateAsync("CustomPage"));
+        Assert.Null(exception);
     }
 }
