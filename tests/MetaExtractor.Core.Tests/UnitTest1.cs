@@ -1,6 +1,7 @@
 using MetaExtractor.Core.Interfaces;
 using MetaExtractor.Core.Services;
 using MetaExtractor.Core.ViewModels;
+using MetaExtractor.Domain.Entities;
 using Moq;
 using OpenCvSharp;
 
@@ -135,7 +136,7 @@ public class AnalyzeViewModelTests
     {
         _mockImageProcessingService = new Mock<IImageProcessingService>();
         _mockImageSourceStrategy = new Mock<IImageSourceStrategy>();
-        _viewModel = new AnalyzeViewModel(_mockImageProcessingService.Object, _mockImageSourceStrategy.Object);
+        _viewModel = new AnalyzeViewModel(_mockImageProcessingService.Object);
     }
 
     [Fact]
@@ -149,10 +150,12 @@ public class AnalyzeViewModelTests
     }
 
     [Fact]
-    public void Constructor_ShouldSetupImageProcessingService()
+    public void Constructor_ShouldSubscribeToProcessingEvents()
     {
-        // Assert - Service should be set up with strategy
-        _mockImageProcessingService.Verify(s => s.SetStrategy(_mockImageSourceStrategy.Object), Times.Once);
+        // Assert - Should subscribe to all processing events
+        _mockImageProcessingService.VerifyAdd(s => s.OnNewFrame += It.IsAny<Action<Mat>>(), Times.Once);
+        _mockImageProcessingService.VerifyAdd(s => s.OnNewMetadata += It.IsAny<Action<Metadata>>(), Times.Once);
+        _mockImageProcessingService.VerifyAdd(s => s.OnFaceDetected += It.IsAny<Action<Face>>(), Times.Once);
     }
 
     [Fact]
