@@ -18,7 +18,7 @@ public class NavigationServiceTests
     {
         var services = new ServiceCollection();
         services.AddTransient<AnalyzeViewModel>(_ => 
-            new AnalyzeViewModel(Mock.Of<IImageProcessingService>(), Mock.Of<IImageSourceStrategy>()));
+            new AnalyzeViewModel(Mock.Of<IImageProcessingService>()));
         services.AddTransient<DataClusterViewModel>();
         services.AddTransient<SettingsViewModel>();
         

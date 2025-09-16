@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:MetaExtractor.Core.ViewModels"
+        xmlns:views="using:MetaExtractor.App.UI.Avalonia.Views"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
@@ -138,7 +139,24 @@
 
             <!-- Page Content -->
             <ContentControl Content="{Binding CurrentPage}" 
-                            Margin="10,80,10,10"/>
+                            Margin="10,80,10,10">
+                <ContentControl.DataTemplates>
+                    <!-- AnalyzeViewModel -> AnalyzeView -->
+                    <DataTemplate DataType="{x:Type vm:AnalyzeViewModel}">
+                        <views:AnalyzeView/>
+                    </DataTemplate>
+                    
+                    <!-- DataClusterViewModel -> DataClusterView -->
+                    <DataTemplate DataType="{x:Type vm:DataClusterViewModel}">
+                        <views:DataClusterView/>
+                    </DataTemplate>
+                    
+                    <!-- SettingsViewModel -> SettingsView -->
+                    <DataTemplate DataType="{x:Type vm:SettingsViewModel}">
+                        <views:SettingsView/>
+                    </DataTemplate>
+                </ContentControl.DataTemplates>
+            </ContentControl>
         </Grid>
     </Grid>
 

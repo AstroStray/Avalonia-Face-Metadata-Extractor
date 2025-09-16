@@ -37,7 +37,7 @@ public partial class ShellViewModel : ObservableObject
         _navigationService.NavigationRequested += OnNavigationRequested;
 
         // Set the default page
-        NavigateToAnalyze();
+        _ = NavigateToAnalyze();
     }
 
     private void OnNavigationRequested(object? sender, NavigationEventArgs e)
