@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using MetaExtractor.App.UI.Avalonia.Views;
+using MetaExtractor.Core.Interfaces;
 using MetaExtractor.Core.Services;
 using MetaExtractor.Core.ViewModels;
 using MetaExtractor.Infrastructure.Data;
@@ -37,28 +38,39 @@ public partial class App : Application
 
     private void ConfigureServices(IServiceCollection services)
     {
-        // Database
+        // Database Configuration
         services.AddDbContext<AppDbContext>(options =>
         {
             options.UseSqlite("Data Source=metaextractor.db");
         });
 
-        // Services
-        services.AddTransient<IImageProcessingService, ImageProcessingService>();
+        // Core Services
+        services.AddScoped<IFaceDetectionService, OpenCvFaceDetectionService>();
+        services.AddScoped<IImageProcessingService, ImageProcessingService>();
+        
+        // Image Source Strategies
+        services.AddTransient<CameraImageSourceStrategy>();
+        services.AddTransient<FileImageSourceStrategy>();
+        
+        // Default strategy registration
         services.AddTransient<IImageSourceStrategy, CameraImageSourceStrategy>();
 
-        // ViewModels
+        // ViewModels with proper dependency injection
         services.AddSingleton<ShellViewModel>();
         services.AddTransient<AnalyzeViewModel>();
         services.AddTransient<DataClusterViewModel>();
         services.AddTransient<SettingsViewModel>();
 
-        // Views
-        // We register the main shell as a singleton, but pages as transient
+        // Views (UI Components)
+        // Shell as singleton for application lifetime, pages as transient for navigation
         services.AddSingleton<ShellView>();
         services.AddTransient<AnalyzeView>();
         services.AddTransient<DataClusterView>();
         services.AddTransient<SettingsView>();
+
+        // Configuration Services
+        // TODO: Add INavigationService when implemented
+        // TODO: Add configuration services for settings management
     }
 
     public override void OnFrameworkInitializationCompleted()
