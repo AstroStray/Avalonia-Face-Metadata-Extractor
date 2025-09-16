@@ -200,8 +200,8 @@ jobs:
                 </div>
                 <p><strong>📊 Quick Access:</strong></p>
                 <ul>
-                    <li><a href="./index.html">📈 Full HTML Coverage Report</a></li>
-                    <li><a href="./Summary.html">📋 Coverage Summary</a></li>
+                    <li><a href="./index.htm">📈 Full HTML Coverage Report</a></li>
+                    <li><a href="./summary.htm">📋 Coverage Summary</a></li>
                 </ul>
                 <p><strong>🔧 Project Info:</strong></p>
                 <ul>
