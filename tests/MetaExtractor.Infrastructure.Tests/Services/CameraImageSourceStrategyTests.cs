@@ -104,7 +104,7 @@ public class CameraImageSourceStrategyTests
     }
 
     [Fact]
-    public async void GetNextFrameAsync_WithValidCamera_ShouldReturnFrameOrNull()
+    public async Task GetNextFrameAsync_WithValidCamera_ShouldReturnFrameOrNull()
     {
         try
         {

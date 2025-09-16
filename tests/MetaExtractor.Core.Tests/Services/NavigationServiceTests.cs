@@ -29,10 +29,14 @@ public class NavigationServiceTests
     }
 
     [Fact]
-    public void DefaultPages_ShouldBeRegistered()
+    public async Task DefaultPages_ShouldBeRegistered()
     {
-        // Act & Assert
+        // Act - Navigate to a default page to verify registration
+        await _navigationService.NavigateAsync("Analyze");
+        
+        // Assert
         Assert.NotNull(_navigationService.CurrentPageKey);
+        Assert.Equal("Analyze", _navigationService.CurrentPageKey);
     }
 
     [Fact]
