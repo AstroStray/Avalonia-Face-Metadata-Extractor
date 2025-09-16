@@ -24,20 +24,44 @@ namespace MetaExtractor.Core.ViewModels
         [ObservableProperty]
         private string _demographics = string.Empty;
 
-        public AnalyzeViewModel(IImageProcessingService imageProcessingService, IImageSourceStrategy imageSourceStrategy)
+        public AnalyzeViewModel(IImageProcessingService imageProcessingService)
         {
             _imageProcessingService = imageProcessingService;
-            _imageProcessingService.SetStrategy(imageSourceStrategy);
 
+            // Subscribe to processing events
             _imageProcessingService.OnNewFrame += (frame) => VideoFrame = frame;
-            _imageProcessingService.OnNewMetadata += (metadata) =>
+            _imageProcessingService.OnNewMetadata += OnMetadataReceived;
+            _imageProcessingService.OnFaceDetected += OnFaceDetected;
+        }
+
+        public void SetImageSourceStrategy(IImageSourceStrategy strategy)
+        {
+            _imageProcessingService.SetStrategy(strategy);
+        }
+
+        private void OnMetadataReceived(Metadata metadata)
+        {
+            // Handle general metadata
+            if (metadata.Key == "FaceDetectionError")
             {
-                var sb = new StringBuilder();
-                sb.AppendLine("Face detected.");
-                Landmarks = sb.ToString();
-                Expressions = "Happy";
-                Demographics = "Male, 25-30";
-            };
+                Landmarks = $"Error: {metadata.Value}";
+            }
+        }
+
+        private void OnFaceDetected(Face face)
+        {
+            // Handle face detection results
+            var sb = new StringBuilder();
+            sb.AppendLine($"Face detected at ({face.X}, {face.Y})");
+            sb.AppendLine($"Size: {face.Width}x{face.Height}");
+            sb.AppendLine($"Confidence: {face.Confidence:P2}");
+            sb.AppendLine($"Method: {face.ProcessingMethod}");
+            
+            Landmarks = sb.ToString();
+            
+            // TODO: Implement actual expression and demographic analysis
+            Expressions = "Detection Active";
+            Demographics = "Analysis Pending";
         }
 
         [RelayCommand]
