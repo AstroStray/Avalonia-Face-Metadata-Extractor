@@ -9,6 +9,7 @@ namespace MetaExtractor.Core.Services
     {
         event Action<Mat>? OnNewFrame;
         event Action<Metadata>? OnNewMetadata;
+        event Action<Face>? OnFaceDetected;
 
         void SetStrategy(IImageSourceStrategy strategy);
         Task StartProcessingAsync();
