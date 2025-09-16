@@ -1,0 +1,140 @@
+name: "🔒 Security Analysis"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    # Run weekly security scans
+    - cron: '0 6 * * 1'  # Every Monday at 6 AM UTC
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+
+jobs:
+  analyze:
+    name: Analyze Code
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'csharp' ]
+
+    steps:
+    - name: 🔄 Checkout repository
+      uses: actions/checkout@v4
+
+    - name: ⚙️ Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: 🔧 Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+        # Override default queries with security-focused queries
+        queries: security-extended,security-and-quality
+
+    - name: 🏗️ Restore dependencies
+      run: dotnet restore
+
+    - name: 🔨 Build solution
+      run: dotnet build --no-restore --configuration Release
+
+    - name: 🔍 Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:${{matrix.language}}"
+
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: 🔄 Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: 🔍 Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          # Fail on high/critical vulnerabilities
+          fail-on-severity: high
+          # Allow licenses (add more as needed)
+          allow-licenses: MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC
+          # Deny problematic licenses
+          deny-licenses: GPL-2.0, GPL-3.0, AGPL-3.0
+          
+  security-hardening:
+    name: Security Hardening Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: 🔒 Run Hardening Checklist
+        run: |
+          echo "🔍 Checking for common security issues..."
+          
+          # Check for hardcoded secrets patterns
+          if grep -r -E "(password|secret|key|token)\s*=\s*['\"][^'\"]*['\"]" src/ tests/ --include="*.cs" --include="*.json" --exclude-dir=bin --exclude-dir=obj; then
+            echo "⚠️ Warning: Potential hardcoded secrets found"
+            exit 1
+          fi
+          
+          # Check for SQL injection patterns
+          if grep -r -E "String\.Format|string\.Format" src/ --include="*.cs" | grep -E "(SELECT|INSERT|UPDATE|DELETE)"; then
+            echo "⚠️ Warning: Potential SQL injection vulnerability"
+            exit 1
+          fi
+          
+          # Check for insecure random number generation
+          if grep -r -E "new Random\(\)" src/ --include="*.cs"; then
+            echo "⚠️ Warning: Insecure random number generation found"
+            exit 1
+          fi
+          
+          # Check for file path traversal vulnerabilities
+          if grep -r -E "Path\.Combine.*\.\." src/ --include="*.cs"; then
+            echo "⚠️ Warning: Potential path traversal vulnerability"
+            exit 1
+          fi
+          
+          echo "✅ Security hardening checks passed"
+
+  license-check:
+    name: License Compliance
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔄 Checkout Repository
+        uses: actions/checkout@v4
+        
+      - name: ⚙️ Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+          
+      - name: 🔍 Check License Compliance
+        run: |
+          echo "📝 Analyzing package licenses..."
+          dotnet restore
+          
+          # List all package references and their versions
+          echo "📦 Project Dependencies:"
+          find . -name "*.csproj" -exec dotnet list {} package \;
+          
+          # Note: For production use, consider using tools like:
+          # - dotnet-project-licenses
+          # - license-checker
+          # - FOSSA CLI
+          
+          echo "ℹ️ Manual license review required for compliance verification"

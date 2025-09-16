@@ -1,0 +1,57 @@
+# GitHub Dependabot configuration for .NET project
+# This will automatically create PRs for dependency updates
+
+version: 2
+updates:
+  # Enable version updates for NuGet (.NET packages)
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "UTC"
+    # Limit the number of open pull requests for version updates
+    open-pull-requests-limit: 10
+    # Group updates for better management
+    groups:
+      avalonia:
+        patterns:
+          - "Avalonia*"
+      microsoft:
+        patterns:
+          - "Microsoft.*"
+      testing:
+        patterns:
+          - "xunit*"
+          - "Moq*"
+          - "coverlet*"
+      opencv:
+        patterns:
+          - "OpenCvSharp*"
+    # Configure assignees and reviewers
+    assignees:
+      - "AstroStray"
+    reviewers:
+      - "AstroStray"
+    # Configure labels for categorization
+    labels:
+      - "dependencies"
+      - "security"
+    # Auto-merge minor and patch updates (optional)
+    # enable-beta-ecosystems: true
+
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 5
+    assignees:
+      - "AstroStray"
+    labels:
+      - "github-actions"
+      - "dependencies"
