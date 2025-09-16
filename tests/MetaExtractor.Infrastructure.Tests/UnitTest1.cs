@@ -1,3 +1,4 @@
+using System.IO;
 using MetaExtractor.Infrastructure.Services;
 using MetaExtractor.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -122,28 +123,42 @@ public class CameraImageSourceStrategyTests
 public class FileImageSourceStrategyTests
 {
     [Fact]
-    public void Constructor_ShouldCreateInstance()
+    public void Constructor_ShouldThrowFileNotFoundForNonExistentFile()
     {
-        // Act & Assert (Should not throw)
-        var strategy = new FileImageSourceStrategy("test.jpg");
-        Assert.NotNull(strategy);
+        // Act & Assert
+        Assert.Throws<FileNotFoundException>(() => new FileImageSourceStrategy("test.jpg"));
     }
 
     [Fact]
-    public async Task GetNextFrameAsync_ShouldHandleFileNotFoundGracefully()
+    public void FileExtensionValidation_ShouldDetectSupportedFormats()
     {
-        // This test ensures the method handles missing files and OpenCV absence gracefully
-        try
-        {
-            var strategy = new FileImageSourceStrategy("nonexistent.jpg");
-            var frame = await strategy.GetNextFrameAsync();
-            // If we get here, OpenCV is available - should return null for nonexistent file
-            Assert.Null(frame);
-        }
-        catch (TypeInitializationException)
-        {
-            // Expected in CI environment without OpenCV runtime
-            Assert.True(true, "OpenCV runtime not available - this is expected in CI");
-        }
+        // Test image extensions
+        Assert.True(FileImageSourceStrategy.IsFileSupported("test.jpg"));
+        Assert.True(FileImageSourceStrategy.IsFileSupported("test.png"));
+        Assert.True(FileImageSourceStrategy.IsFileSupported("test.mp4"));
+        Assert.True(FileImageSourceStrategy.IsFileSupported("test.avi"));
+        
+        // Test unsupported extensions
+        Assert.False(FileImageSourceStrategy.IsFileSupported("test.txt"));
+        Assert.False(FileImageSourceStrategy.IsFileSupported("test.exe"));
+    }
+
+    [Fact]
+    public void GetSupportedExtensions_ShouldReturnCorrectFormats()
+    {
+        var imageExtensions = FileImageSourceStrategy.GetSupportedImageExtensions();
+        var videoExtensions = FileImageSourceStrategy.GetSupportedVideoExtensions();
+
+        Assert.Contains(".jpg", imageExtensions);
+        Assert.Contains(".png", imageExtensions);
+        Assert.Contains(".mp4", videoExtensions);
+        Assert.Contains(".avi", videoExtensions);
+    }
+
+    [Fact]
+    public void Constructor_ShouldThrowFileNotFoundForMissingFile()
+    {
+        // Act & Assert
+        Assert.Throws<FileNotFoundException>(() => new FileImageSourceStrategy("nonexistent.jpg"));
     }
 }

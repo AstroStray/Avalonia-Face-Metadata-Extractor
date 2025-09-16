@@ -46,6 +46,7 @@ public partial class App : Application
         // Services
         services.AddTransient<IImageProcessingService, ImageProcessingService>();
         services.AddTransient<IImageSourceStrategy, CameraImageSourceStrategy>();
+        services.AddSingleton<INavigationService, NavigationService>();
 
         // ViewModels
         services.AddSingleton<ShellViewModel>();

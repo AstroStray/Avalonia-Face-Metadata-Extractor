@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MetaExtractor.Core.Services;
 
 namespace MetaExtractor.Core.ViewModels;
 
@@ -26,59 +27,80 @@ public partial class ShellViewModel : ObservableObject
     [ObservableProperty]
     private string _settingsButtonBackground = "#333333";
 
-    private readonly AnalyzeViewModel _analyzeViewModel;
-    private readonly DataClusterViewModel _dataClusterViewModel;
-    private readonly SettingsViewModel _settingsViewModel;
+    private readonly INavigationService _navigationService;
 
-    public ShellViewModel(
-        AnalyzeViewModel analyzeViewModel,
-        DataClusterViewModel dataClusterViewModel,
-        SettingsViewModel settingsViewModel)
+    public ShellViewModel(INavigationService navigationService)
     {
-        _analyzeViewModel = analyzeViewModel;
-        _dataClusterViewModel = dataClusterViewModel;
-        _settingsViewModel = settingsViewModel;
+        _navigationService = navigationService;
+
+        // Subscribe to navigation events
+        _navigationService.NavigationRequested += OnNavigationRequested;
 
         // Set the default page
         NavigateToAnalyze();
     }
 
-    [RelayCommand]
-    private void NavigateToAnalyze()
+    private void OnNavigationRequested(object? sender, NavigationEventArgs e)
     {
-        CurrentPage = _analyzeViewModel;
-        CurrentPageTitle = "Analyze";
-        CurrentPageSubtitle = "Face Detection & Analysis";
+        CurrentPage = e.ViewModel as ObservableObject;
         
-        // Update button states
-        AnalyzeButtonBackground = "#007acc";
-        DataClusterButtonBackground = "#333333";
-        SettingsButtonBackground = "#333333";
+        // Update UI based on the page key
+        switch (e.PageKey)
+        {
+            case "Analyze":
+                CurrentPageTitle = "Analyze";
+                CurrentPageSubtitle = "Face Detection & Analysis";
+                AnalyzeButtonBackground = "#007acc";
+                DataClusterButtonBackground = "#333333";
+                SettingsButtonBackground = "#333333";
+                break;
+            case "DataCluster":
+                CurrentPageTitle = "Data Cluster";
+                CurrentPageSubtitle = "Metadata Analysis & Clustering";
+                AnalyzeButtonBackground = "#333333";
+                DataClusterButtonBackground = "#007acc";
+                SettingsButtonBackground = "#333333";
+                break;
+            case "Settings":
+                CurrentPageTitle = "Settings";
+                CurrentPageSubtitle = "Application Configuration";
+                AnalyzeButtonBackground = "#333333";
+                DataClusterButtonBackground = "#333333";
+                SettingsButtonBackground = "#007acc";
+                break;
+        }
     }
 
     [RelayCommand]
-    private void NavigateToDataCluster()
+    private async Task NavigateToAnalyze()
     {
-        CurrentPage = _dataClusterViewModel;
-        CurrentPageTitle = "Data Cluster";
-        CurrentPageSubtitle = "Metadata Analysis & Clustering";
-        
-        // Update button states
-        AnalyzeButtonBackground = "#333333";
-        DataClusterButtonBackground = "#007acc";
-        SettingsButtonBackground = "#333333";
+        await _navigationService.NavigateAsync("Analyze");
     }
 
     [RelayCommand]
-    private void NavigateToSettings()
+    private async Task NavigateToDataCluster()
     {
-        CurrentPage = _settingsViewModel;
-        CurrentPageTitle = "Settings";
-        CurrentPageSubtitle = "Application Configuration";
-        
-        // Update button states
-        AnalyzeButtonBackground = "#333333";
-        DataClusterButtonBackground = "#333333";
-        SettingsButtonBackground = "#007acc";
+        await _navigationService.NavigateAsync("DataCluster");
     }
+
+    [RelayCommand]
+    private async Task NavigateToSettings()
+    {
+        await _navigationService.NavigateAsync("Settings");
+    }
+
+    [RelayCommand(CanExecute = nameof(CanGoBack))]
+    private async Task GoBack()
+    {
+        await _navigationService.GoBackAsync();
+    }
+
+    [RelayCommand(CanExecute = nameof(CanGoForward))]
+    private async Task GoForward()
+    {
+        await _navigationService.GoForwardAsync();
+    }
+
+    public bool CanGoBack => _navigationService.CanGoBack;
+    public bool CanGoForward => _navigationService.CanGoForward;
 }

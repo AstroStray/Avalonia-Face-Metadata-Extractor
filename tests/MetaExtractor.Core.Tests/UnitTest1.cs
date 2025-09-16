@@ -58,84 +58,70 @@ public class ImageProcessingServiceTests
 
 public class ShellViewModelTests
 {
-    private readonly Mock<AnalyzeViewModel> _mockAnalyzeViewModel;
-    private readonly Mock<DataClusterViewModel> _mockDataClusterViewModel;
-    private readonly Mock<SettingsViewModel> _mockSettingsViewModel;
+    private readonly Mock<INavigationService> _mockNavigationService;
     private readonly ShellViewModel _shellViewModel;
 
     public ShellViewModelTests()
     {
-        // Create mocks for dependencies
-        var mockImageProcessingService = new Mock<IImageProcessingService>();
-        var mockImageSourceStrategy = new Mock<IImageSourceStrategy>();
-        
-        _mockAnalyzeViewModel = new Mock<AnalyzeViewModel>(
-            mockImageProcessingService.Object, 
-            mockImageSourceStrategy.Object);
-        _mockDataClusterViewModel = new Mock<DataClusterViewModel>();
-        _mockSettingsViewModel = new Mock<SettingsViewModel>();
-
-        _shellViewModel = new ShellViewModel(
-            _mockAnalyzeViewModel.Object,
-            _mockDataClusterViewModel.Object,
-            _mockSettingsViewModel.Object);
+        _mockNavigationService = new Mock<INavigationService>();
+        _shellViewModel = new ShellViewModel(_mockNavigationService.Object);
     }
 
     [Fact]
-    public void Constructor_ShouldInitializeWithAnalyzePageAsDefault()
+    public void Constructor_ShouldInitializeWithNavigationService()
     {
         // Assert
-        Assert.Equal(_mockAnalyzeViewModel.Object, _shellViewModel.CurrentPage);
+        Assert.NotNull(_shellViewModel);
+        // Verify navigation service was called on initialization
+        _mockNavigationService.Verify(x => x.NavigateAsync("Analyze", null), Times.Once);
+    }
+
+    [Fact]
+    public async Task NavigateToAnalyze_ShouldCallNavigationService()
+    {
+        // Act
+        await _shellViewModel.NavigateToAnalyzeCommand.ExecuteAsync(null);
+
+        // Assert
+        _mockNavigationService.Verify(x => x.NavigateAsync("Analyze", null), Times.AtLeastOnce);
+    }
+
+    [Fact]
+    public async Task NavigateToDataCluster_ShouldCallNavigationService()
+    {
+        // Act
+        await _shellViewModel.NavigateToDataClusterCommand.ExecuteAsync(null);
+
+        // Assert
+        _mockNavigationService.Verify(x => x.NavigateAsync("DataCluster", null), Times.Once);
+    }
+
+    [Fact]
+    public async Task NavigateToSettings_ShouldCallNavigationService()
+    {
+        // Act
+        await _shellViewModel.NavigateToSettingsCommand.ExecuteAsync(null);
+
+        // Assert
+        _mockNavigationService.Verify(x => x.NavigateAsync("Settings", null), Times.Once);
+    }
+
+    [Fact]
+    public void OnNavigationRequested_ShouldUpdateUIForAnalyzePage()
+    {
+        // Arrange
+        var mockAnalyzeViewModel = new Mock<AnalyzeViewModel>(Mock.Of<IImageProcessingService>(), Mock.Of<IImageSourceStrategy>());
+        var eventArgs = new NavigationEventArgs("Analyze", mockAnalyzeViewModel.Object);
+
+        // Act - Simulate navigation event
+        _mockNavigationService.Raise(x => x.NavigationRequested += null, _mockNavigationService.Object, eventArgs);
+
+        // Assert
         Assert.Equal("Analyze", _shellViewModel.CurrentPageTitle);
         Assert.Equal("Face Detection & Analysis", _shellViewModel.CurrentPageSubtitle);
         Assert.Equal("#007acc", _shellViewModel.AnalyzeButtonBackground);
         Assert.Equal("#333333", _shellViewModel.DataClusterButtonBackground);
         Assert.Equal("#333333", _shellViewModel.SettingsButtonBackground);
-    }
-
-    [Fact]
-    public void NavigateToAnalyze_ShouldUpdateCurrentPageAndState()
-    {
-        // Act
-        _shellViewModel.NavigateToAnalyzeCommand.Execute(null);
-
-        // Assert
-        Assert.Equal(_mockAnalyzeViewModel.Object, _shellViewModel.CurrentPage);
-        Assert.Equal("Analyze", _shellViewModel.CurrentPageTitle);
-        Assert.Equal("Face Detection & Analysis", _shellViewModel.CurrentPageSubtitle);
-        Assert.Equal("#007acc", _shellViewModel.AnalyzeButtonBackground);
-        Assert.Equal("#333333", _shellViewModel.DataClusterButtonBackground);
-        Assert.Equal("#333333", _shellViewModel.SettingsButtonBackground);
-    }
-
-    [Fact]
-    public void NavigateToDataCluster_ShouldUpdateCurrentPageAndState()
-    {
-        // Act
-        _shellViewModel.NavigateToDataClusterCommand.Execute(null);
-
-        // Assert
-        Assert.Equal(_mockDataClusterViewModel.Object, _shellViewModel.CurrentPage);
-        Assert.Equal("Data Cluster", _shellViewModel.CurrentPageTitle);
-        Assert.Equal("Metadata Analysis & Clustering", _shellViewModel.CurrentPageSubtitle);
-        Assert.Equal("#333333", _shellViewModel.AnalyzeButtonBackground);
-        Assert.Equal("#007acc", _shellViewModel.DataClusterButtonBackground);
-        Assert.Equal("#333333", _shellViewModel.SettingsButtonBackground);
-    }
-
-    [Fact]
-    public void NavigateToSettings_ShouldUpdateCurrentPageAndState()
-    {
-        // Act
-        _shellViewModel.NavigateToSettingsCommand.Execute(null);
-
-        // Assert
-        Assert.Equal(_mockSettingsViewModel.Object, _shellViewModel.CurrentPage);
-        Assert.Equal("Settings", _shellViewModel.CurrentPageTitle);
-        Assert.Equal("Application Configuration", _shellViewModel.CurrentPageSubtitle);
-        Assert.Equal("#333333", _shellViewModel.AnalyzeButtonBackground);
-        Assert.Equal("#333333", _shellViewModel.DataClusterButtonBackground);
-        Assert.Equal("#007acc", _shellViewModel.SettingsButtonBackground);
     }
 }
 

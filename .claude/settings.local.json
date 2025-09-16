@@ -16,7 +16,8 @@
       "WebFetch(domain:raw.githubusercontent.com)",
       "Bash(curl:*)",
       "Bash(gh run list:*)",
-      "Bash(gh run view:*)"
+      "Bash(gh run view:*)",
+      "Bash(gh api:*)"
     ],
     "deny": [],
     "ask": []
