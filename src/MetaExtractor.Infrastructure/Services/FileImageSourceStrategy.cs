@@ -61,6 +61,7 @@ public class FileImageSourceStrategy : IImageSourceStrategy, IDisposable
 
         if (frame.Empty())
         {
+            frame.Dispose();
             return Task.FromResult<Mat?>(null);
         }
 
@@ -76,13 +77,15 @@ public class FileImageSourceStrategy : IImageSourceStrategy, IDisposable
         }
 
         _isImageRead = true;
-        
+
+        Mat? mat = null;
         try
         {
-            var mat = new Mat(_filePath, ImreadModes.Color);
+            mat = new Mat(_filePath, ImreadModes.Color);
 
             if (mat.Empty())
             {
+                mat.Dispose();
                 return Task.FromResult<Mat?>(null);
             }
 
@@ -90,6 +93,7 @@ public class FileImageSourceStrategy : IImageSourceStrategy, IDisposable
         }
         catch (Exception)
         {
+            mat?.Dispose();
             return Task.FromResult<Mat?>(null);
         }
     }

@@ -82,6 +82,7 @@ public class CameraImageSourceStrategy : IImageSourceStrategy, IDisposable
 
         if (frame.Empty())
         {
+            frame.Dispose();
             return Task.FromResult<Mat?>(null);
         }
 
