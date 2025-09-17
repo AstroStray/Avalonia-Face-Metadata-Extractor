@@ -16,6 +16,7 @@ public class ServiceRegistrationTests
         // Register core services with mocks for dependencies not in Core layer
         services.AddScoped<IFaceDetectionService, OpenCvFaceDetectionService>();
         services.AddScoped<IImageProcessingService, ImageProcessingService>();
+        services.AddSingleton<INavigationService, NavigationService>();
         
         // Register ViewModels
         services.AddTransient<AnalyzeViewModel>();
@@ -38,6 +39,7 @@ public class ServiceRegistrationTests
         // Assert
         Assert.Contains(serviceDescriptors, s => s.ServiceType == typeof(IFaceDetectionService));
         Assert.Contains(serviceDescriptors, s => s.ServiceType == typeof(IImageProcessingService));
+        Assert.Contains(serviceDescriptors, s => s.ServiceType == typeof(INavigationService));
     }
 
     [Fact]
@@ -69,6 +71,9 @@ public class ServiceRegistrationTests
 
         var imageProcessingService = serviceDescriptors.Find(s => s.ServiceType == typeof(IImageProcessingService));
         Assert.Equal(ServiceLifetime.Scoped, imageProcessingService?.Lifetime);
+
+        var navigationService = serviceDescriptors.Find(s => s.ServiceType == typeof(INavigationService));
+        Assert.Equal(ServiceLifetime.Singleton, navigationService?.Lifetime);
 
         var shellViewModel = serviceDescriptors.Find(s => s.ServiceType == typeof(ShellViewModel));
         Assert.Equal(ServiceLifetime.Singleton, shellViewModel?.Lifetime);

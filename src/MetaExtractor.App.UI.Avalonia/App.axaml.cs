@@ -70,7 +70,6 @@ public partial class App : Application
         services.AddTransient<SettingsView>();
 
         // Configuration Services
-        // TODO: Add INavigationService when implemented
         // TODO: Add configuration services for settings management
     }
 

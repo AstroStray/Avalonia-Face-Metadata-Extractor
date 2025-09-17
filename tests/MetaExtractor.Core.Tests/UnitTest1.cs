@@ -111,7 +111,7 @@ public class ShellViewModelTests
     public void OnNavigationRequested_ShouldUpdateUIForAnalyzePage()
     {
         // Arrange
-        var mockAnalyzeViewModel = new Mock<AnalyzeViewModel>(Mock.Of<IImageProcessingService>(), Mock.Of<IImageSourceStrategy>());
+        var mockAnalyzeViewModel = new Mock<AnalyzeViewModel>(Mock.Of<IImageProcessingService>());
         var eventArgs = new NavigationEventArgs("Analyze", mockAnalyzeViewModel.Object);
 
         // Act - Simulate navigation event
