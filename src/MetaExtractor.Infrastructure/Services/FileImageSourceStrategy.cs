@@ -57,15 +57,23 @@ public class FileImageSourceStrategy : IImageSourceStrategy, IDisposable
             return Task.FromResult<Mat?>(null);
 
         var frame = new Mat();
-        _videoCapture.Read(frame);
+        try
+        {
+            _videoCapture.Read(frame);
 
-        if (frame.Empty())
+            if (frame.Empty())
+            {
+                frame.Dispose();
+                return Task.FromResult<Mat?>(null);
+            }
+
+            return Task.FromResult<Mat?>(frame);
+        }
+        catch
         {
             frame.Dispose();
             return Task.FromResult<Mat?>(null);
         }
-
-        return Task.FromResult<Mat?>(frame);
     }
 
     private Task<Mat?> GetImageFrameAsync()
