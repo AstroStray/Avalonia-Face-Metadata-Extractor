@@ -19,7 +19,9 @@
       "Bash(gh run view:*)",
       "Bash(gh api:*)",
       "Bash(gh pr:*)",
-      "Bash(dotnet build:*)"
+      "Bash(dotnet build:*)",
+      "Bash(gh label:*)",
+      "Bash(gh issue edit:*)"
     ],
     "deny": [],
     "ask": []
