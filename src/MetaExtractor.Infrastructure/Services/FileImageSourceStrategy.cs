@@ -57,14 +57,23 @@ public class FileImageSourceStrategy : IImageSourceStrategy, IDisposable
             return Task.FromResult<Mat?>(null);
 
         var frame = new Mat();
-        _videoCapture.Read(frame);
-
-        if (frame.Empty())
+        try
         {
+            _videoCapture.Read(frame);
+
+            if (frame.Empty())
+            {
+                frame.Dispose();
+                return Task.FromResult<Mat?>(null);
+            }
+
+            return Task.FromResult<Mat?>(frame);
+        }
+        catch
+        {
+            frame.Dispose();
             return Task.FromResult<Mat?>(null);
         }
-
-        return Task.FromResult<Mat?>(frame);
     }
 
     private Task<Mat?> GetImageFrameAsync()
@@ -76,13 +85,15 @@ public class FileImageSourceStrategy : IImageSourceStrategy, IDisposable
         }
 
         _isImageRead = true;
-        
+
+        Mat? mat = null;
         try
         {
-            var mat = new Mat(_filePath, ImreadModes.Color);
+            mat = new Mat(_filePath, ImreadModes.Color);
 
             if (mat.Empty())
             {
+                mat.Dispose();
                 return Task.FromResult<Mat?>(null);
             }
 
@@ -90,6 +101,7 @@ public class FileImageSourceStrategy : IImageSourceStrategy, IDisposable
         }
         catch (Exception)
         {
+            mat?.Dispose();
             return Task.FromResult<Mat?>(null);
         }
     }

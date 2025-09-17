@@ -78,14 +78,23 @@ public class CameraImageSourceStrategy : IImageSourceStrategy, IDisposable
     public Task<Mat?> GetNextFrameAsync()
     {
         var frame = new Mat();
-        _capture.Read(frame);
-
-        if (frame.Empty())
+        try
         {
+            _capture.Read(frame);
+
+            if (frame.Empty())
+            {
+                frame.Dispose();
+                return Task.FromResult<Mat?>(null);
+            }
+
+            return Task.FromResult<Mat?>(frame);
+        }
+        catch
+        {
+            frame.Dispose();
             return Task.FromResult<Mat?>(null);
         }
-
-        return Task.FromResult<Mat?>(frame);
     }
 
     public void Dispose()
