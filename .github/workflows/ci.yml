@@ -30,6 +30,11 @@ jobs:
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
 
+    - name: 📋 Install OpenCV dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libopencv-dev
+
     - name: 📦 Cache NuGet Packages
       uses: actions/cache@v4
       with:
@@ -141,6 +146,11 @@ jobs:
       uses: actions/setup-dotnet@v5
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: 📋 Install OpenCV dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libopencv-dev
 
     - name: 🔨 Autobuild
       uses: github/codeql-action/autobuild@v3
